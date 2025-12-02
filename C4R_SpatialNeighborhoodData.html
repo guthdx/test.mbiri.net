@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>C4R: Spatial & Neighborhood Data Inventory</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --ink:#0b3b6f;
+      --bg:#f7f9fc;
+      --card:#ffffff;
+      --muted:#4b5563;
+      --accent:#0ea5e9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin:0; padding:24px; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg); color:#1f2937; line-height:1.6;
+    }
+    h1,h2 { color:var(--ink); margin-top:0; }
+    h1 { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.1rem); }
+    h2 { font-size: clamp(1.2rem, 1rem + 1.2vw, 1.6rem); }
+    .wrap { max-width: 980px; margin: 0 auto; }
+    .card {
+      background:var(--card); border-radius:14px; padding:20px; margin:18px 0;
+      box-shadow: 0 4px 14px rgba(2,6,23,0.06);
+    }
+    a { color:var(--accent); text-decoration: none; }
+    ul { margin:0 0 0 1.2rem; }
+    .meta { color:var(--muted); font-size:0.95rem; }
+    .grid-3 { display:grid; grid-template-columns:1fr; gap:14px; }
+    @media (min-width: 850px) {
+      .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+    .pill { display:inline-block; padding:2px 10px; border-radius:999px; background:#e0f2fe; color:#075985; font-size:0.9rem; }
+    .footer { color:var(--muted); font-size:0.92rem; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="card">
+      <h1>C4R: Spatial & Neighborhood Data Inventory</h1>
+      <p class="meta"><strong>Paper:</strong> Spatial and neighborhood data in the Collaborative Cohort of Cohorts for COVID-19 Research (C4R)</p>
+      <p><a href="original_papers/hirsch_c4r_inventory.pdf">📄 View the Original Paper (PDF)</a></p>
+      <p class="meta">C4R brings together 14 long-running U.S. cohorts (&gt;50,000 participants) to study how places people live relate to COVID-19 and health.</p>
+    </header>
+
+    <section class="card">
+      <h2>🌍 Community Summary</h2>
+      <p>This paper is like a map of what the C4R study already knows about people’s neighborhoods. The team looked across 14 big health studies and wrote down which groups have data about things like parks, stores, traffic, crime, air quality, and how close people live to each other. They found that most groups track “social environment” facts (like income and education in an area). Fewer groups have “built environment” details (like food stores or walkability), and the fewest have “natural environment” data (like air pollution or trees).</p>
+      <p>The people in these studies live in areas that cover about a <strong>third of the U.S. land where people live</strong>. These places are usually more urban and diverse than average. One important gap: as of the time of the paper, none of the studies had linked local, neighborhood-level COVID case or vaccine information directly to participants’ addresses. This catalog helps researchers line up (“harmonize”) neighborhood measures so future work can better show how communities shape COVID-19 risks and recovery.</p>
+    </section>
+
+    <section class="card">
+      <h2>📝 Blog Drafts</h2>
+      <div class="grid-3">
+        <div>
+          <h3>1) Where You Live Matters for COVID-19</h3>
+          <p>Scientists pulled together 14 major U.S. studies to see what they know about people’s neighborhoods—things like parks, stores, and air pollution. Most studies had strong data on the social side of neighborhoods, fewer on the built and natural environment. This big-picture inventory is a springboard to understand how place shaped the pandemic—and how it still shapes our health.</p>
+        </div>
+        <div>
+          <h3>2) The C4R Map: Filling Neighborhood Data Gaps</h3>
+          <p>Do our health studies track the things that actually affect daily life? The C4R team cataloged what each cohort knows about nearby parks, traffic, food access, and more. They also flagged a key gap: neighborhood-level COVID data weren’t linked to people’s addresses. Next up: harmonize and connect the dots so we can design smarter, place-based solutions.</p>
+        </div>
+        <div>
+          <h3>3) Social, Built, Natural: Three Lenses on Health</h3>
+          <p>Neighborhoods shape our routines and risks. C4R’s inventory shows social environment measures are common (like income and education), built environment measures are less common (like walkability), and natural environment measures are scarcest (like air quality and greenness). Knowing what’s available helps researchers focus on what’s missing—and why it matters.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>📱 Facebook Post Drafts</h2>
+      <p><strong>Post 1:</strong> 🗺️ A new C4R report maps what we know about neighborhoods—parks, stores, traffic, air quality—and how that info can help explain COVID-19 patterns. Social data are common; environmental data are still catching up. #C4R #Neighborhoods #PublicHealth</p>
+      <p><strong>Post 2:</strong> 🧩 14 U.S. cohorts, 50K+ people, one question: how does where you live shape your health? C4R cataloged available neighborhood data to power smarter research and solutions. #HealthEquity #BuiltEnvironment</p>
+      <p><strong>Post 3:</strong> ⚠️ Data gap alert: cohorts hadn’t linked neighborhood-level COVID rates and policies to participants’ addresses. Filling this gap could sharpen future prevention. #COVID19 #DataForGood</p>
+    </section>
+
+    <section class="card">
+      <h2>🎬 YouTube Video Script (3–5 min)</h2>
+      <h3>Title: “Neighborhoods & COVID-19: What C4R’s Data Inventory Reveals”</h3>
+      <p><em>Hook (0:00–0:20)</em> — What if your neighborhood—its parks, stores, traffic, and air—could change how a pandemic hits? The C4R project pulled together 14 long-running studies to find out what neighborhood data are already on hand.</p>
+      <p><em>Set-up (0:20–1:00)</em> — The team built a cross-cohort inventory: Do cohorts have addresses geocoded? What neighborhood measures exist? Social environment (like income, education) is well covered; built (walkability, food access) and natural (air, trees) are less complete.</p>
+      <p><em>Key findings (1:00–2:30)</em> — C4R participants live in areas covering ~28% of U.S. land and ~52% of the population. These areas are more urban and diverse than average. Multiple cohorts overlap in cities like Chicago and New York—great for sharing methods and data. Big gap: neighborhood-level COVID case and vaccine data weren’t yet linked to addresses.</p>
+      <ul>
+        <li>12 of 14 cohorts have some neighborhood measures linked to addresses.</li>
+        <li>Food environment and walkability are the most common built metrics.</li>
+        <li>Air quality and greenspace appear in fewer cohorts; heat and weather are rare.</li>
+      </ul>
+      <p><em>Why it matters (2:30–3:30)</em> — Harmonized, shareable measures can help pinpoint which neighborhood features raise or lower risk, guide equitable policies, and prepare for future crises.</p>
+      <p><em>Closer (3:30–4:00)</em> — The inventory is a roadmap: connect what we have, fill the gaps we don’t, and use place-based insights to protect health.</p>
+    </section>
+
+    <section class="card">
+      <h2>🔎 Main Findings</h2>
+      <ul>
+        <li>C4R participants’ neighborhoods cover about <strong>28% of U.S. land</strong> and <strong>52% of the U.S. population</strong>; coverage is more urban and diverse than average.</li>
+        <li><strong>12 of 14</strong> cohorts had neighborhood measures; social environment data were most common; built and natural environment data were less complete.</li>
+        <li>Common built metrics: access to food stores, walkability, recreation facilities, traffic/road proximity.</li>
+        <li>Natural environment metrics were least available (air quality, greenspace; temperature/weather in very few cohorts).</li>
+        <li>No cohort had yet linked neighborhood-level COVID case or vaccine data directly to participant addresses at the time of the inventory.</li>
+        <li>Inventory enables harmonization so researchers can better study how place shapes infection, severity, recovery, and disparities.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>🏥 How This Information Can Be Used</h2>
+      <ul>
+        <li><strong>Communities:</strong> Advocate for greener, safer, more walkable neighborhoods and better access to healthy food; ask local leaders to track and share neighborhood COVID trends transparently.</li>
+        <li><strong>Healthcare Providers:</strong> Use address-linked neighborhood indicators (e.g., food access, pollution) to tailor prevention and outreach, especially for patients at higher risk.</li>
+        <li><strong>Program Directors:</strong> Prioritize interventions in places with fewer resources—e.g., support parks and recreation, improve transit/walkability, partner with food retailers.</li>
+        <li><strong>Legislators:</strong> Fund standardized, privacy-preserving neighborhood metrics and require agencies to publish small-area COVID and environmental data to support equitable responses.</li>
+      </ul>
+      <p class="footer"><span class="pill">Note</span> This page summarizes methods, tables, and figures such as the U.S. coverage map and heatmap of measures reported by each cohort.</p>
+    </section>
+  </div>
+</body>
+</html>

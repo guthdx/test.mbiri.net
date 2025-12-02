@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Health Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --primary: #5e8b7e;
+            --secondary: #a7c4bc;
+            --accent: #dfeeea;
+            --dark: #2f5d62;
+            --text: #333;
+            --light-text: #666;
+            --warning: #e76f51;
+            --success: #2a9d8f;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .nav-button {
+            padding: 10px 20px;
+            background-color: var(--secondary);
+            border: none;
+            border-radius: 25px;
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .nav-button.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .dashboard-section {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-section.active {
+            display: block;
+        }
+        
+        .section-header {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            height: 350px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card h3 {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .stat-description {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
+        .info-block {
+            background-color: var(--accent);
+            border-left: 5px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .info-block h3 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .info-block p {
+            font-size: 0.95rem;
+        }
+        
+        .relation-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .relation-card h3 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .relation-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .relation-chart {
+            flex: 1;
+            min-width: 300px;
+            height: 300px;
+        }
+        
+        .relation-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .recommendation-list {
+            list-style-type: none;
+            margin: 20px 0;
+        }
+        
+        .recommendation-list li {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            background-color: var(--accent);
+            border-radius: 5px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .recommendation-list li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+        
+        .recommendation-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin: 30px 0 15px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--light-text);
+        }
+        
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 2rem;
+            }
+        }
+        
+        .about-section {
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        
+        .about-section p {
+            margin-bottom: 15px;
+        }
+        
+        /* Custom styling for tooltips */
+        .chart-tooltip {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Community Health Overview</h1>
+            <p>Understanding our health patterns to build a stronger community</p>
+        </div>
+        
+        <div class="dashboard-nav">
+            <button class="nav-button active" data-section="overview">Overview</button>
+            <button class="nav-button" data-section="diabetes">Diabetes & Health</button>
+            <button class="nav-button" data-section="nutrition">Nutrition</button>
+            <button class="nav-button" data-section="physical-activity">Physical Activity</button>
+            <button class="nav-button" data-section="recommendations">Recommendations</button>
+            <button class="nav-button" data-section="about">About This Data</button>
+        </div>
+        
+        <!-- Overview Section -->
+        <div class="dashboard-section active" id="overview">
+            <div class="section-header">
+                <h2>Community Health Overview</h2>
+            </div>
+            
+            <div class="info-block">
+                <h3>Our Community's Health at a Glance</h3>
+                <p>This dashboard provides insights into the health patterns of our community based on data from 2,779 individuals. Understanding these patterns can help us make better health choices and strengthen our community wellness.</p>
+            </div>
+            
+            <div class="grid-container">
+                <div class="stat-card">
+                    <h3>Average Age</h3>
+                    <div class="stat-value">40.9</div>
+                    <div class="stat-description">Years</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Diabetes Rate</h3>
+                    <div class="stat-value">19%</div>
+                    <div class="stat-description">Of community members</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Current Smokers</h3>
+                    <div class="stat-value">36%</div>
+                    <div class="stat-description">Of community members</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Average Daily Steps</h3>
+                    <div class="stat-value">4,944</div>
+                    <div class="stat-description">Steps per day</div>
+                </div>
+            </div>
+            
+            <div class="grid-container">
+                <div class="chart-container">
+                    <canvas id="bmiChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="smokingChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="info-block">
+                <h3>Why This Matters</h3>
+                <p>Healthy habits can help prevent diabetes, heart disease, and other conditions that affect many in our community. The information shared here shows how lifestyle choices like eating well and staying active connect to our overall health.</p>
+            </div>
+        </div>
+        
+        <!-- Diabetes Section -->
+        <div class="dashboard-section" id="diabetes">
+            <div class="section-header">
+                <h2>Diabetes & Health</h2>
+            </div>
+            
+            <div class="info-block">
+                <h3>Understanding Diabetes in Our Community</h3>
+                <p>Diabetes affects about 19% of our community members. That's nearly 1 in 5 people. Understanding the connection between diabetes and other health factors can help us make better choices.</p>
+            </div>
+            
+            <div class="relation-card">
+                <h3>Weight and Diabetes</h3>
+                <div class="relation-content">
+                    <div class="relation-chart">
+                        <canvas id="diabetesBmiChart"></canvas>
+                    </div>
+                    <div class="relation-info">
+                        <p>The chart shows how diabetes rates increase with higher body weight:</p>
+                        <ul class="recommendation-list">
+                            <li>Normal weight: 5.7% have diabetes</li>
+                            <li>Overweight: 13.7% have diabetes</li>
+                            <li>Obese: 24.4% have diabetes</li>
+                            <li>Severely obese: 28.6% have diabetes</li>
+                        </ul>
+                        <p>Maintaining a healthy weight is one way to lower diabetes risk.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="relation-card">
+                <h3>Physical Activity and Diabetes</h3>
+                <div class="relation-content">
+                    <div class="relation-chart">
+                        <canvas id="diabetesStepsChart"></canvas>
+                    </div>
+                    <div class="relation-info">
+                        <p>People without diabetes tend to take more steps daily:</p>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>With Diabetes</span>
+                                <span>4,050 steps</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 40.5%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Without Diabetes</span>
+                                <span>5,991 steps</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 59.9%"></div>
+                            </div>
+                        </div>
+                        <p>Being more active can help manage blood sugar levels and reduce diabetes risk.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Nutrition Section -->
+        <div class="dashboard-section" id="nutrition">
+            <div class="section-header">
+                <h2>Nutrition Patterns</h2>
+            </div>
+            
+            <div class="info-block">
+                <h3>Our Community's Eating Habits</h3>
+                <p>What we eat affects our health in many ways. This section shows the average servings of different foods people in our community eat each day.</p>
+            </div>
+            
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="nutritionChart"></canvas>
+            </div>
+            
+            <div class="grid-container">
+                <div class="stat-card">
+                    <h3>Vegetables</h3>
+                    <div class="stat-value">2.6</div>
+                    <div class="stat-description">Servings per day</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Fruits</h3>
+                    <div class="stat-value">1.0</div>
+                    <div class="stat-description">Servings per day</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Grains</h3>
+                    <div class="stat-value">5.8</div>
+                    <div class="stat-description">Servings per day</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Dairy</h3>
+                    <div class="stat-value">1.2</div>
+                    <div class="stat-description">Servings per day</div>
+                </div>
+            </div>
+            
+            <div class="info-block">
+                <h3>Traditional Foods and Health</h3>
+                <p>Traditional foods like beans, corn, squash, berries, and wild plants have nourished our ancestors for generations. Many of these foods are rich in nutrients that help prevent chronic diseases. Combining traditional wisdom with modern nutrition knowledge can help us eat in ways that support our health.</p>
+            </div>
+        </div>
+        
+        <!-- Physical Activity Section -->
+        <div class="dashboard-section" id="physical-activity">
+            <div class="section-header">
+                <h2>Physical Activity</h2>
+            </div>
+            
+            <div class="info-block">
+                <h3>Staying Active for Health</h3>
+                <p>Regular physical activity helps maintain a healthy weight, reduces the risk of chronic diseases, and improves overall well-being. The data shows how activity levels in our community connect to health outcomes.</p>
+            </div>
+            
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="stepsDistributionChart"></canvas>
+            </div>
+            
+            <div class="relation-card">
+                <h3>Current Activity Levels</h3>
+                <div class="relation-content">
+                    <div class="relation-info" style="flex: 1 1 100%;">
+                        <p>The average community member takes about 4,944 steps per day. Health experts often recommend a goal of 10,000 steps daily, though even smaller increases can provide health benefits.</p>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Current Average</span>
+                                <span>4,944 steps (49% of goal)</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 49.4%"></div>
+                            </div>
+                        </div>
+                        
+                        <p>Even adding 2,000 more steps per day (about 20 minutes of walking) could significantly improve health outcomes in our community.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-block">
+                <h3>Traditional Activities</h3>
+                <p>Traditional activities like dancing, gathering, hunting, and gardening have kept our communities active for generations. These activities not only provide physical benefits but also connect us to our culture and community.</p>
+            </div>
+        </div>
+        
+        <!-- Recommendations Section -->
+        <div class="dashboard-section" id="recommendations">
+            <div class="section-header">
+                <h2>Health Recommendations</h2>
+            </div>
+            
+            <div class="info-block">
+                <h3>Small Steps Toward Better Health</h3>
+                <p>Based on the data, here are some recommendations that could help improve health in our community. Remember that even small changes can make a big difference over time.</p>
+            </div>
+            
+            <h3 class="recommendation-title">Nutrition Recommendations</h3>
+            <ul class="recommendation-list">
+                <li>Aim for at least 3-5 servings of vegetables each day (current average: 2.6)</li>
+                <li>Increase fruit intake to at least 2 servings daily (current average: 1.0)</li>
+                <li>Choose whole grains like wild rice, corn, or whole wheat over refined grains</li>
+                <li>Consider traditional foods like beans, berries, and wild plants as part of a balanced diet</li>
+                <li>Limit processed foods, sugary drinks, and high-fat meats</li>
+            </ul>
+            
+            <h3 class="recommendation-title">Physical Activity Recommendations</h3>
+            <ul class="recommendation-list">
+                <li>Aim to increase daily steps gradually (current average: 4,944 steps)</li>
+                <li>Try to add 2,000 steps (about 20 minutes of walking) to your daily routine</li>
+                <li>Incorporate traditional activities like dancing or gardening</li>
+                <li>Make activity a family or community event to help everyone stay motivated</li>
+                <li>Start small - even 10 minutes of movement several times a day can help</li>
+            </ul>
+            
+            <h3 class="recommendation-title">Diabetes Prevention</h3>
+            <ul class="recommendation-list">
+                <li>Maintain a healthy weight through balanced nutrition and regular activity</li>
+                <li>Get regular health screenings to catch early warning signs</li>
+                <li>Know your family history - if diabetes runs in your family, prevention is especially important</li>
+                <li>If you have diabetes, work with healthcare providers to manage it effectively</li>
+                <li>Join community wellness programs for support and motivation</li>
+            </ul>
+        </div>
+        
+        <!-- About Section -->
+        <div class="dashboard-section" id="about">
+            <div class="section-header">
+                <h2>About This Data</h2>
+            </div>
+            
+            <div class="about-section">
+                <p>This dashboard presents information from a health assessment of 2,779 community members. The data comes from the "phase4diet_preliminary_250331.csv" dataset, which contains information about various health indicators, including:</p>
+                
+                <ul class="recommendation-list">
+                    <li>Demographics (age, gender)</li>
+                    <li>Health measures (BMI, cholesterol, diabetes status)</li>
+                    <li>Lifestyle factors (smoking, physical activity)</li>
+                    <li>Nutrition patterns (servings of different food groups)</li>
+                </ul>
+                
+                <p>The goal of this dashboard is to help community members understand health patterns and make informed choices. The information is presented in a way that respects privacy - no individual's data can be identified.</p>
+                
+                <p>Understanding these patterns can help us work together to improve health outcomes in our community. By combining traditional wisdom with current health knowledge, we can develop approaches that honor our heritage while addressing today's challenges.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>This dashboard was created to support community health initiatives. The data is anonymous and is presented to help inform, not to judge or label individuals.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Dashboard navigation
+        const navButtons = document.querySelectorAll('.nav-button');
+        const sections = document.querySelectorAll('.dashboard-section');
+        
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const sectionId = button.getAttribute('data-section');
+                
+                // Update active button
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Show selected section, hide others
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === sectionId) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        // Chart.js configuration
+        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+        Chart.defaults.color = '#666';
+        
+        // Data from analysis
+        const dashboardData = {
+            bmiData: [
+                {category: "Normal weight", count: 544},
+                {category: "Overweight", count: 765},
+                {category: "Obese", count: 716},
+                {category: "Severely obese", count: 731}
+            ],
+            smokingData: [
+                {status: "Current smoker", count: 1002},
+                {status: "Former smoker", count: 666},
+                {status: "Never smoked", count: 1100}
+            ],
+            nutritionData: [
+                {food: "Vegetables", servings: 2.6},
+                {food: "Fruits", servings: 1.0},
+                {food: "Grains", servings: 5.8},
+                {food: "Dairy", servings: 1.2},
+                {food: "Red meat", servings: 0.5}
+            ],
+            diabetesByBMIData: [
+                {category: "Normal weight", percentage: 5.7},
+                {category: "Overweight", percentage: 13.7},
+                {category: "Obese", percentage: 24.4},
+                {category: "Severely obese", percentage: 28.6}
+            ],
+            stepsData: [
+                {group: "With diabetes", steps: 4050},
+                {group: "Without diabetes", steps: 5991}
+            ],
+            stepsDistribution: [
+                {range: "0-1,999", count: 338},
+                {range: "2,000-3,999", count: 609},
+                {range: "4,000-5,999", count: 583},
+                {range: "6,000-7,999", count: 397},
+                {range: "8,000-9,999", count: 232},
+                {range: "10,000+", count: 278}
+            ]
+        };
+        
+        // Create BMI Chart
+        const bmiCtx = document.getElementById('bmiChart').getContext('2d');
+        new Chart(bmiCtx, {
+            type: 'pie',
+            data: {
+                labels: dashboardData.bmiData.map(item => item.category),
+                datasets: [{
+                    data: dashboardData.bmiData.map(item => item.count),
+                    backgroundColor: ['#2a9d8f', '#e9c46a', '#f4a261', '#e76f51'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Weight Categories in Our Community',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((context.raw / total) * 100);
+                                return `${context.label}: ${context.raw} people (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Create Smoking Chart
+        const smokingCtx = document.getElementById('smokingChart').getContext('2d');
+        new Chart(smokingCtx, {
+            type: 'doughnut',
+            data: {
+                labels: dashboardData.smokingData.map(item => item.status),
+                datasets: [{
+                    data: dashboardData.smokingData.map(item => item.count),
+                    backgroundColor: ['#e76f51', '#f4a261', '#2a9d8f'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Smoking Status in Our Community',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((context.raw / total) * 100);
+                                return `${context.label}: ${context.raw} people (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Create Nutrition Chart
+        const nutritionCtx = document.getElementById('nutritionChart').getContext('2d');
+        new Chart(nutritionCtx, {
+            type: 'bar',
+            data: {
+                labels: dashboardData.nutritionData.map(item => item.food),
+                datasets: [{
+                    label: 'Average Daily Servings',
+                    data: dashboardData.nutritionData.map(item => item.servings),
+                    backgroundColor: [
+                        '#2a9d8f',
+                        '#e9c46a',
+                        '#f4a261',
+                        '#e76f51',
+                        '#264653'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Average Servings Per Day'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Average Daily Food Consumption',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // Create Diabetes by BMI Chart
+        const diabetesBmiCtx = document.getElementById('diabetesBmiChart').getContext('2d');
+        new Chart(diabetesBmiCtx, {
+            type: 'bar',
+            data: {
+                labels: dashboardData.diabetesByBMIData.map(item => item.category),
+                datasets: [{
+                    label: 'Diabetes Rate (%)',
+                    data: dashboardData.diabetesByBMIData.map(item => item.percentage),
+                    backgroundColor: '#5e8b7e',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Percent with Diabetes'
+                        },
+                        max: 30
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // Create Diabetes Steps Chart
+        const diabetesStepsCtx = document.getElementById('diabetesStepsChart').getContext('2d');
+        new Chart(diabetesStepsCtx, {
+            type: 'bar',
+            data: {
+                labels: dashboardData.stepsData.map(item => item.group),
+                datasets: [{
+                    label: 'Average Daily Steps',
+                    data: dashboardData.stepsData.map(item => item.steps),
+                    backgroundColor: '#5e8b7e',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Average Steps Per Day'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // Create Steps Distribution Chart
+        const stepsDistCtx = document.getElementById('stepsDistributionChart').getContext('2d');
+        new Chart(stepsDistCtx, {
+            type: 'bar',
+            data: {
+                labels: dashboardData.stepsDistribution.map(item => item.range),
+                datasets: [{
+                    label: 'Number of People',
+                    data: dashboardData.stepsDistribution.map(item => item.count),
+                    backgroundColor: '#5e8b7e',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of People'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Daily Steps Range'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Daily Steps Distribution',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
