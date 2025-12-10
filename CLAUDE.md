@@ -44,11 +44,13 @@ The MBIRI Research Dissemination Hub is a static website that hosts accessible r
 
 ```
 /var/www/test.mbiri.net/html/
-├── *.html                      - Landing pages and research summaries (root level)
+├── *.html                      - Landing pages and research summaries (root level, 14 summaries)
+├── _template_research_summary.html  - Base template for new research summaries
+├── index_mbiri.html.backup     - Backup of main landing page
 ├── original_papers/            - Research papers (PDFs)
 │   ├── *.pdf                   - Curated papers (25+)
 │   ├── word_backups/*.docx     - Source manuscripts
-│   └── sst_uploads/            - Auto-deployed uploads from sst.mbiri.net
+│   └── sst_uploads/            - Auto-deployed uploads from sst.mbiri.net (not git-tracked)
 ├── annual_meeting/*.html       - Conference presentation summaries
 ├── *.png                       - Institution logos (6 files)
 └── *.zip                       - Downloadable paper collections
@@ -94,20 +96,41 @@ sst.mbiri.net → Generate simplified HTML → SCP deploy → test.mbiri.net
 
 ## Styling Conventions
 
+### Unified MBIRI Research Summary Design (December 2024)
+All research summary pages now use a consistent, professional design template adapted from the Essential 8 Calculator styling:
+
+#### Visual Design System
+- **Color Palette**:
+  - MBIRI Blue: `#AFE3EF` (light blue gradient)
+  - MBIRI Green: `#335941` (dark green - primary brand)
+  - MBIRI Gold: `#BFA44E` (accent/borders)
+  - MBIRI Coral: `#EA9674` (warning boxes)
+  - Background: `linear-gradient(135deg, #AFE3EF 0%, #90A2B6 100%)`
+
+- **Header**: MBIRI branded section with logo and tagline "Creating Opportunities for Health"
+- **Footer**: Three institutional partner logos (MBIRI, NHLBI, Strong Heart Study)
+- **Container**: Professional white card with rounded corners, shadows, max-width 900px
+- **Sections**: Gold left-border cards with consistent spacing and typography
+
+#### Template File
+- `_template_research_summary.html` - Base template for creating new research summaries
+- Contains all standard sections: page header, summaries, blog posts, social media, video scripts
+- Includes info boxes (blue), highlight boxes (gold), and warning boxes (coral)
+
 ### CSS Architecture
 All pages use embedded CSS with consistent patterns:
 
-- **CSS Variables**: Root-level variables for theming (`--primary: #0077cc`, `--secondary`, `--accent`, `--dark`)
-- **Layout**: CSS Grid for multi-column layouts, Flexbox for component alignment
+- **Layout**: Flexbox for component alignment, centered containers
 - **Responsive**: Mobile-first with `@media (max-width: 768px)` breakpoints
-- **Typography**: Arial sans-serif, 1.6 line-height for readability
-- **Colors**: Blue primary (#0077cc), white backgrounds, subtle shadows
+- **Typography**: 'Helvetica Neue', Helvetica, Arial, sans-serif; 1.8 line-height for content
+- **Shadows**: Subtle box-shadows for depth (0 2px 8px rgba(0,0,0,0.05))
 
 ### HTML Patterns
-- Semantic HTML5 structure
-- Line numbering in code examples using `cat -n` format
-- Links to original papers: `<a href="original_papers/filename.pdf">View Original Paper</a>`
-- Logo footer with three institutional partners
+- Semantic HTML5 structure with MBIRI branded header and footer
+- Page header with title, subtitle, and paper download link
+- Content sections with emoji icons (📚, 📝, 📱, 🎥)
+- Links to original papers: `<a href="original_papers/filename.pdf">Download Original Paper</a>`
+- Branded footer with three institutional partner logos and attribution text
 
 ## Interactive Tools Implementation
 

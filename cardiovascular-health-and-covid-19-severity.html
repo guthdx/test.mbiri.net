@@ -1,73 +1,428 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Summary: Cardiovascular Health and COVID-19 Severity</title>
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 900px; margin: auto; background: #f5fcff; color: #222; }
-    h1, h2, h3 { color: #0b4f6c; }
-    .section { margin-bottom: 40px; }
-    ul { padding-left: 20px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardiovascular Health and COVID-19 Severity</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #AFE3EF 0%, #90A2B6 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .mbiri-header {
+            background: linear-gradient(135deg, #AFE3EF 0%, #ffffff 50%, #f8f9fa 100%);
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 4px solid #335941;
+        }
+
+        .mbiri-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .mbiri-logo {
+            height: 60px;
+            width: auto;
+        }
+
+        .mbiri-tagline {
+            color: #335941;
+            font-size: 1rem;
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .content-wrapper {
+            padding: 30px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #335941;
+            padding-bottom: 20px;
+        }
+
+        .page-header h1 {
+            color: #484848;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.3;
+        }
+
+        .page-header .subtitle {
+            color: #6F6F71;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .page-header .paper-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #335941;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+
+        .page-header .paper-link:hover {
+            background: #264430;
+        }
+
+        .summary-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            border-left: 4px solid #BFA44E;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-section h2 {
+            color: #335941;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-section h3 {
+            color: #484848;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .summary-section h4 {
+            color: #6F6F71;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .summary-section p {
+            color: #484848;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .summary-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-section ul {
+            padding-left: 25px;
+            line-height: 1.8;
+            color: #484848;
+        }
+
+        .summary-section li {
+            margin-bottom: 10px;
+        }
+
+        .summary-section a {
+            color: #335941;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 2px solid rgba(51, 89, 65, 0.3);
+            transition: border-color 0.2s ease;
+        }
+
+        .summary-section a:hover {
+            border-bottom-color: #335941;
+        }
+
+        .summary-section strong {
+            color: #335941;
+            font-weight: 700;
+        }
+
+        .summary-section em {
+            font-style: italic;
+            color: #6F6F71;
+        }
+
+        .info-box {
+            background: rgba(175, 227, 239, 0.15);
+            border-left: 4px solid #AFE3EF;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .info-box h3 {
+            color: #335941;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .info-box p {
+            color: #484848;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: rgba(191, 164, 78, 0.1);
+            border-left: 4px solid #BFA44E;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .highlight-box p {
+            color: #484848;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .warning-box {
+            background: rgba(234, 150, 116, 0.15);
+            border: 2px solid #EA9674;
+            color: #484848;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .warning-box strong {
+            display: block;
+            margin-bottom: 10px;
+            color: #335941;
+            font-weight: 700;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #AFE3EF 0%, #90A2B6 100%);
+            padding: 20px 30px;
+            color: #484848;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            border-top: 4px solid #335941;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-logos {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .footer-logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .footer-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .footer-text strong {
+            color: #335941;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .footer-credit {
+            color: #6F6F71;
+            font-size: 0.85rem;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .mbiri-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+                padding: 15px 20px;
+            }
+
+            .content-wrapper {
+                padding: 20px;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .summary-section {
+                padding: 20px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-logos {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Better Heart Health, Better COVID Outcomes</h1>
-  <h2>How the AHA’s Life’s Essential 8 Linked to Severe COVID Risk</h2>
-  🔗 <a href="/original_papers/plante_risk_covid_aha_epi.pdf" target="_blank">Read the original paper</a></p>
+    <div class="container">
+        <!-- MBIRI Branded Header -->
+        <div class="mbiri-header">
+            <div class="mbiri-logo-section">
+                <img src="mbiri_logo.png" alt="Missouri Breaks Industries Research, Inc." class="mbiri-logo">
+            </div>
+            <div class="mbiri-tagline">
+                Creating Opportunities for Health
+            </div>
+        </div>
 
-  <div class="section">
-    <h3>Summary</h3>
-    <p>
-      People who have healthy hearts may do better if they get COVID-19. This study looked at heart health scores from thousands of people using a tool called "Life’s Essential 8." It includes things like exercise, eating healthy, blood pressure, and sleep. The people with the best scores were much less likely to go to the hospital or die from COVID. This tells us that keeping your heart and body healthy could also protect you during a pandemic.
-    </p>
-  </div>
+        <!-- Main Content Area -->
+        <div class="content-wrapper">
+            <!-- Page Title Section -->
+            <div class="page-header">
+                <h1>Better Heart Health, Better COVID Outcomes</h1>
+                <p class="subtitle">How the AHA's Life's Essential 8 Linked to Severe COVID Risk</p>
+                <a href="original_papers/plante_risk_covid_aha_epi.pdf" target="_blank" class="paper-link">📄 Read the Original Paper</a>
+            </div>
 
-  <div class="section">
-    <h3>Blog Post Drafts</h3>
-    <h4>1. Heart Health May Be Key to Surviving COVID-19</h4>
-    <p>
-      Could your cardiovascular health protect you from severe COVID? A new study says yes. Using the AHA’s Life’s Essential 8 scoring system, researchers found that people with the best heart health were 41% less likely to experience hospitalization or death from COVID-19. This is one more reason to take prevention seriously.
-    </p>
+            <!-- Summary Section -->
+            <div class="summary-section">
+                <h2>📚 Summary</h2>
+                <p>
+                    People who have healthy hearts may do better if they get COVID-19. This study looked at heart health scores from thousands of people using a tool called "Life's Essential 8." It includes things like exercise, eating healthy, blood pressure, and sleep. The people with the best scores were much less likely to go to the hospital or die from COVID. This tells us that keeping your heart and body healthy could also protect you during a pandemic.
+                </p>
+            </div>
 
-    <h4>2. The Life’s Essential 8 and COVID-19 — What’s the Connection?</h4>
-    <p>
-      Life’s Essential 8 — a score developed by the American Heart Association — measures your heart health across eight areas, including diet, exercise, and blood sugar. A new study using the C4R dataset found that higher scores meant lower risk for severe COVID. It’s a powerful link between daily habits and pandemic outcomes.
-    </p>
+            <!-- Blog Posts Section -->
+            <div class="summary-section">
+                <h2>📝 Blog Post Drafts</h2>
 
-    <h4>3. Prevention Isn’t Just About Vaccines</h4>
-    <p>
-      Vaccines are essential — but they’re not the only line of defense. People in better overall cardiovascular shape had fewer severe COVID outcomes. This study suggests that improving your health now might protect you in the next crisis, too.
-    </p>
-  </div>
+                <h3>1. Heart Health May Be Key to Surviving COVID-19</h3>
+                <p>
+                    Could your cardiovascular health protect you from severe COVID? A new study says yes. Using the AHA's Life's Essential 8 scoring system, researchers found that people with the best heart health were 41% less likely to experience hospitalization or death from COVID-19. This is one more reason to take prevention seriously.
+                </p>
 
-  <div class="section">
-    <h3>Facebook Post Drafts</h3>
-    <ul>
-      <li>🫀 People with great heart health were 41% less likely to be hospitalized or die from COVID-19. Your health habits matter! #HeartHealth #COVID19</li>
-      <li>Exercise, blood pressure, sleep — all part of the AHA’s Life’s Essential 8. A new study links this score to lower risk of severe COVID. #PreventionMatters</li>
-      <li>New research shows that staying heart-healthy could help protect you during pandemics. Let’s build better habits! #LifesEssential8 #COVIDStudy</li>
-    </ul>
-  </div>
+                <h3>2. The Life's Essential 8 and COVID-19 — What's the Connection?</h3>
+                <p>
+                    Life's Essential 8 — a score developed by the American Heart Association — measures your heart health across eight areas, including diet, exercise, and blood sugar. A new study using the C4R dataset found that higher scores meant lower risk for severe COVID. It's a powerful link between daily habits and pandemic outcomes.
+                </p>
 
-  <div class="section">
-    <h3>YouTube Video Script (3–5 Minutes)</h3>
-    <h4>Title: How Your Heart Health Affects Your COVID Risk</h4>
-    <p>
-      [Opening shot: Host jogging outdoors, upbeat music]
-      <br><strong>Host:</strong> "We all know that heart health matters — but did you know it could affect how you do in a pandemic?"
-      <br><br>
-      [Cut to graphic: AHA’s Life’s Essential 8 — diet, activity, blood pressure, etc.]
-      <br><strong>Host (voiceover):</strong> "Researchers looked at people’s scores on Life’s Essential 8 — a heart health checklist from the American Heart Association."
-      <br><br>
-      [On screen: Chart shows risk for severe COVID drops as score goes up]
-      <br><strong>Host:</strong> "What they found was powerful: those with the best scores were 41% less likely to end up in the hospital or die from COVID."
-      <br><br>
-      [Cut to people walking, cooking, managing stress]
-      <br><strong>Host:</strong> "This means staying active, eating smart, sleeping well — it’s not just good for your heart. It could be life-saving."
-      <br><br>
-      [Closing shot: Call to action with AHA link and prevention tips]
-      <br><strong>Host:</strong> "Want to improve your odds in the next health crisis? Start with your heart."
-    </p>
-  </div>
+                <h3>3. Prevention Isn't Just About Vaccines</h3>
+                <p>
+                    Vaccines are essential — but they're not the only line of defense. People in better overall cardiovascular shape had fewer severe COVID outcomes. This study suggests that improving your health now might protect you in the next crisis, too.
+                </p>
+            </div>
+
+            <!-- Social Media Posts Section -->
+            <div class="summary-section">
+                <h2>📱 Facebook Post Drafts</h2>
+                <ul>
+                    <li>🫀 People with great heart health were 41% less likely to be hospitalized or die from COVID-19. Your health habits matter! #HeartHealth #COVID19</li>
+                    <li>Exercise, blood pressure, sleep — all part of the AHA's Life's Essential 8. A new study links this score to lower risk of severe COVID. #PreventionMatters</li>
+                    <li>New research shows that staying heart-healthy could help protect you during pandemics. Let's build better habits! #LifesEssential8 #COVIDStudy</li>
+                </ul>
+            </div>
+
+            <!-- YouTube Script Section -->
+            <div class="summary-section">
+                <h2>🎥 YouTube Video Script (3–5 Minutes)</h2>
+                <h3>Title: How Your Heart Health Affects Your COVID Risk</h3>
+
+                <h4>Opening</h4>
+                <p>[Opening shot: Host jogging outdoors, upbeat music]<br>
+                <strong>Host:</strong> "We all know that heart health matters — but did you know it could affect how you do in a pandemic?"</p>
+
+                <h4>Main Content</h4>
+                <p>[Cut to graphic: AHA's Life's Essential 8 — diet, activity, blood pressure, etc.]<br>
+                <strong>Host (voiceover):</strong> "Researchers looked at people's scores on Life's Essential 8 — a heart health checklist from the American Heart Association."</p>
+
+                <p>[On screen: Chart shows risk for severe COVID drops as score goes up]<br>
+                <strong>Host:</strong> "What they found was powerful: those with the best scores were 41% less likely to end up in the hospital or die from COVID."</p>
+
+                <p>[Cut to people walking, cooking, managing stress]<br>
+                <strong>Host:</strong> "This means staying active, eating smart, sleeping well — it's not just good for your heart. It could be life-saving."</p>
+
+                <h4>Closing</h4>
+                <p>[Closing shot: Call to action with AHA link and prevention tips]<br>
+                <strong>Host:</strong> "Want to improve your odds in the next health crisis? Start with your heart."</p>
+            </div>
+
+            <!-- Key Takeaway Box -->
+            <div class="info-box">
+                <h3>Key Takeaways</h3>
+                <p>People with the highest cardiovascular health scores on the American Heart Association's Life's Essential 8 metric were 41% less likely to experience severe COVID-19 outcomes, including hospitalization and death. This study demonstrates the critical connection between baseline cardiovascular health and pandemic resilience.</p>
+            </div>
+
+            <!-- Highlight Box -->
+            <div class="highlight-box">
+                <p><strong>Did You Know?</strong> The Life's Essential 8 includes diet quality, physical activity, nicotine exposure, sleep health, body mass index, cholesterol levels, blood glucose, and blood pressure. Maintaining healthy levels across these metrics may protect against severe illness from infectious diseases like COVID-19.</p>
+            </div>
+        </div>
+
+        <!-- MBIRI Footer with Institutional Logos -->
+        <div class="footer">
+            <div class="footer-content">
+                <div class="footer-logos">
+                    <img src="mbiri_logo.png" alt="Missouri Breaks Industries Research, Inc." class="footer-logo">
+                    <img src="nhlbi_logo.png" alt="National Heart, Lung, and Blood Institute" class="footer-logo">
+                    <img src="shs_heart_logo.png" alt="Strong Heart Study" class="footer-logo">
+                </div>
+                <div class="footer-text">
+                    <strong>Missouri Breaks Industries Research, Inc.</strong>
+                    This research summary is provided by MBIRI as part of our commitment to creating opportunities for health in American Indian communities.
+                    <div class="footer-credit">
+                        Part of the Strong Heart Study and NHLBI research collaboration.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
